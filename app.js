@@ -3,7 +3,10 @@ const auth =require("./routes/auth.js")
 const productRoute=require("./routes/products.js")
 const bodyParser=require("body-parser")
 const mongoose=require('mongoose')
-
+const dotenv=require('dotenv')
+dotenv.config()
+const MONGODB_URI=process.env.MONGODB_URI;
+const PORT=process.env.PORT || 5000;
 //creation of the  server instance   
 const app=express()
 //pour forcer la partie body ml req c'est middleware pour focer body bch yodher
@@ -46,19 +49,20 @@ app.use("/auth",auth);
 app.use("/product",productRoute);
 
 
-//racine route donc lazem lokhrin kbalha tnajem tssir error ki tebda plusieurs get
+//route racine must be in the bottom 
 app.get('/',(req,res)=>{
     res.send("Welcome to our home route")
 })
-
-mongoose.connect('mongodb+srv://oussemamhatli62:31aout1999%40@cluster0.2lsjzsm.mongodb.net/?retryWrites=true&w=majority').then(()=>{
-console.log("mongoose")    
-app.listen(4000,()=>{
-        console.log("Server is running on port 4000");
-    })
+//mongoose connection
+mongoose.connect(MONGODB_URI).then(()=>{
+console.log("mongoose")  
+// creation of the server instance 
+app.listen(PORT,()=>{
+    console.log("Server is running on port 4000");
+})
 }).catch(err=>{
     console.log("Error: " + err)
-})
-// creation of the server instance 
+})   
+
 
 
